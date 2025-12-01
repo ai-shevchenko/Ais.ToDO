@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Ais.Commons.CQRS\Ais.Commons.CQRS.csproj" />
+      <ProjectReference Include="..\Ais.Commons.DependencyInjection\Ais.Commons.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Ais.ToDo.Contracts\Ais.ToDo.Contracts.csproj" />
+      <ProjectReference Include="..\Ais.ToDo.Core\Ais.ToDo.Core.csproj" />
+      <ProjectReference Include="..\Ais.ToDo.Infrastructure.Contracts\Ais.ToDo.Infrastructure.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="15.1.0" />
+      <PackageReference Include="FluentValidation" Version="12.1.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+      <PackageReference Include="MediatR" Version="13.1.0" />
+    </ItemGroup>
+
+</Project>
