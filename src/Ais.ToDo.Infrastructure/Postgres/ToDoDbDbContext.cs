@@ -6,21 +6,21 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Ais.ToDo.Infrastructure.Postgres;
 
-internal sealed class ToDoContext : DbContext, IToDoContext
+internal sealed class ToDoDbContext : DbContext, IToDoContext
 {
-    public ToDoContext(DbContextOptions<ToDoContext> options)
+    public ToDoDbContext(DbContextOptions<ToDoDbContext> options)
         : base(options)
     {
     }
     
-    public DbSet<ToDoItem> ToDoItems { get; init; }
+    public DbSet<ToDoItem> ToDoItems { get; private init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         
         modelBuilder.HasDefaultSchema("ais");
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ToDoContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ToDoDbContext).Assembly);
         modelBuilder.AddTransactionalOutboxEntities();
     }
 
