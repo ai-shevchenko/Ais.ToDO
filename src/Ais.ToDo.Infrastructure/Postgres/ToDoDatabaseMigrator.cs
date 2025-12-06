@@ -1,37 +1,36 @@
 ﻿using Ais.Commons.EntityFramework.Contracts;
-using Ais.ToDo.Infrastructure.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Ais.ToDo.Infrastructure.Postgres;
 
-internal sealed class ToDoDatabaseMigrator : IDatabaseMigrator
+internal sealed class ToDoDatabaseMigrator : BaseDatabaseMigrator<ToDoDbDbContext>
 {
-    private readonly IToDoContext _context;
-    private readonly ILogger<ToDoDatabaseMigrator> _logger;
-
-    public ToDoDatabaseMigrator(IToDoContext context, ILogger<ToDoDatabaseMigrator> logger)
+    public ToDoDatabaseMigrator(ToDoDbDbContext context, ILogger<ToDoDatabaseMigrator> logger)
+        : base(context, logger)
     {
-        _context = context;
-        _logger = logger;
     }
 
-    public async Task MigrateAsync(CancellationToken cancellationToken = default)
+    public override async Task MigrateAsync(CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Migrating database...");
+        Logger.LogInformation("Start migrating database.");
         
-        var pending = await _context.Database.GetPendingMigrationsAsync(cancellationToken);
-        if (pending.Any())
+        var pending = (await Context.Database.GetPendingMigrationsAsync(cancellationToken)).ToList();
+        if (pending.Count > 0)
         {
-            await _context.Database.MigrateAsync(cancellationToken);
+            Logger.LogInformation("Found next pending migrations: {@MigrationNames}.", string.Join(", ", pending));
+            
+            await Context.Database.MigrateAsync(cancellationToken);
+            
+            Logger.LogInformation("All migrations was applied.");
         }
         
         await MigrateDataAsync(cancellationToken);
         
-        _logger.LogInformation("Database migrated.");
+        Logger.LogInformation("Database migrated.");
     }
 
-    public Task MigrateDataAsync(CancellationToken cancellationToken = default)
+    public override Task MigrateDataAsync(CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }

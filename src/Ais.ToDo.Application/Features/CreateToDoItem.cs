@@ -4,6 +4,9 @@ using Ais.ToDo.Core.Entities;
 using Ais.ToDo.Infrastructure.Contracts;
 using AutoMapper;
 using FluentValidation;
+
+using MassTransit;
+
 using MediatR;
 
 namespace Ais.ToDo.Application.Features;
@@ -12,8 +15,7 @@ public static class CreateToDoItem
 {
     public sealed record Command : BaseCommand<CreateToDoItemDto, ToDoItemCreatedDto>, 
         IValidatableRequest,
-        ITransactionalRequest,
-        IPublishableRequest
+        ITransactionalRequest
     {
         public Command(CreateToDoItemDto model) 
             : base(model)
@@ -23,13 +25,15 @@ public static class CreateToDoItem
     
     internal sealed class Handler : IRequestHandler<Command, ToDoItemCreatedDto>
     {
-        private readonly IToDoContext _context;
+        private readonly IToDoDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IPublishEndpoint _publishEndpoint;
         
-        public Handler(IToDoContext context, IMapper mapper)
+        public Handler(IToDoDbContext context, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _context = context;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<ToDoItemCreatedDto> Handle(Command request, CancellationToken cancellationToken)
@@ -37,9 +41,10 @@ public static class CreateToDoItem
             var toDoItem = _mapper.Map<ToDoItem>(request.Model);
             await _context.ToDoItems.AddAsync(toDoItem, cancellationToken);
             
-            await _context.SaveChangesAsync(cancellationToken);
-
             var created = _mapper.Map<ToDoItemCreatedDto>(toDoItem);
+            await _publishEndpoint.Publish(created, cancellationToken);
+            
+            await _context.SaveChangesAsync(cancellationToken);
             
             return created;
         }

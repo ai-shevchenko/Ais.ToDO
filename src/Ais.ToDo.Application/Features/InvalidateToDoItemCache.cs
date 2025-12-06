@@ -1,19 +1,22 @@
-﻿using Ais.Commons.CQRS.Notifications;
-using Ais.Commons.CQRS.Requests;
+﻿using Ais.Commons.CQRS.Requests;
 using Ais.ToDo.Contracts;
+
 using MediatR;
+
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace Ais.ToDo.Application.Features;
 
 public static class InvalidateToDoItemCache
 {
-    public sealed record Command : BaseCommand<UpdateToDoItemDto>
+    public sealed record Command : BaseCommand<ToDoItemUpdatedDto>
     {
-        public Command(UpdateToDoItemDto model) 
+        public Command(ToDoItemUpdatedDto model) 
             : base(model)
         {
         }
+        
+        public string CacheKey => $"todo-item:{Model.Id}";
     }
     
     internal sealed class Handler : IRequestHandler<Command>
@@ -27,24 +30,7 @@ public static class InvalidateToDoItemCache
 
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
-            var key = $"todo-item:{request.Model.Id}";
-            await _cache.RemoveAsync(key, cancellationToken);
-        }
-    }
-    
-    internal sealed class NotificationHandler : INotificationHandler<NotificationWrapper<UpdateToDoItemDto>>
-    {
-        private readonly IDistributedCache _cache;
-
-        public NotificationHandler(IDistributedCache cache)
-        {
-            _cache = cache;
-        }
-
-        public async Task Handle(NotificationWrapper<UpdateToDoItemDto> notification, CancellationToken cancellationToken)
-        {
-            var key = $"todo-item:{notification.Model.Id}";
-            await _cache.RemoveAsync(key, cancellationToken);
+            await _cache.RemoveAsync(request.CacheKey, cancellationToken);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Testcontainers.Redis;
 
-namespace Ais.ToDo.Tests;
+namespace Ais.Commons.Tests.Containers;
 
 public sealed class RedisTests : BaseContainerTests
 {

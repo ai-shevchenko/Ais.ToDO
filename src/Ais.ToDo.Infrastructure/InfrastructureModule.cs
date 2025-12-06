@@ -45,7 +45,7 @@ public sealed class InfrastructureModule : Module
             x.AddConsumer<ToDoItemUpdatedConsumer>();
             x.AddConsumer<ToDoItemCreatedConsumer>();
             
-            x.AddEntityFrameworkOutbox<ToDoContext>(o =>
+            x.AddEntityFrameworkOutbox<ToDoDbDbContext>(o =>
             {
                 o.UsePostgres();
                 o.UseBusOutbox();
@@ -53,7 +53,7 @@ public sealed class InfrastructureModule : Module
             
             x.AddConfigureEndpointsCallback((context, name, cfg) =>
             {
-                cfg.UseEntityFrameworkOutbox<ToDoContext>(context);
+                cfg.UseEntityFrameworkOutbox<ToDoDbDbContext>(context);
             });
             
             x.UsingRabbitMq((context, cfg) =>
@@ -69,11 +69,16 @@ public sealed class InfrastructureModule : Module
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString(PostgresConnectionStringName);
-        services.AddDbContextPool<IToDoContext, ToDoContext>(options =>
+        services.AddDbContextPool<IToDoDbContext, ToDoDbDbContext>(options =>
         {
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {
-                npgsqlOptions.MigrationsAssembly(typeof(ToDoContext).Assembly);
+                npgsqlOptions.MigrationsAssembly(typeof(ToDoDbDbContext).Assembly);
+
+#if DEBUG
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+#endif
             });
         });
         services.AddTransient<IDatabaseMigrator, ToDoDatabaseMigrator>();

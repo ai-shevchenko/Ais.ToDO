@@ -8,7 +8,7 @@ namespace Ais.ToDo.Application.Validators;
 
 internal sealed class UpdateToDoItemValidator : ToDoItemValidator<UpdateToDoItemDto>
 {
-    public UpdateToDoItemValidator(IToDoContext context) 
+    public UpdateToDoItemValidator(IToDoDbContext context) 
         : base(context)
     {
     }

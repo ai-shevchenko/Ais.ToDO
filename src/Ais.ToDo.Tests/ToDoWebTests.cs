@@ -11,12 +11,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ais.ToDo.Tests;
 
-public sealed class ToDoTests : BaseTests<ToDoWebApplicationFactory, Program>,
+public sealed class ToDoWebTests : BaseTests<ToDoWebApplicationFactory, Program>,
     IClassFixture<PostgresTests>,
     IClassFixture<RabbitMqTests>, 
     IClassFixture<RedisTests>
 {
-    public ToDoTests(
+    public ToDoWebTests(
         PostgresTests postgres,
         RabbitMqTests rabbitmq,
         RedisTests redis)
@@ -28,12 +28,8 @@ public sealed class ToDoTests : BaseTests<ToDoWebApplicationFactory, Program>,
     {
         await ExecuteAsync<IToDoDbContext>(async context =>
         {
-            await context.Database
-                .MigrateAsync();
-
-            await context.ToDoItems
-                .AddRangeAsync(ToDoFixtures.GetItems(100));
-        
+            await context.Database.MigrateAsync();
+            await context.ToDoItems.AddRangeAsync(ToDoFixtures.GetItems(100));
             await context.SaveChangesAsync();
         });
     }
@@ -42,8 +38,7 @@ public sealed class ToDoTests : BaseTests<ToDoWebApplicationFactory, Program>,
     {
         await ExecuteAsync<IToDoDbContext>(async context =>
         {
-            await context.ToDoItems
-                .ExecuteDeleteAsync();
+            await context.ToDoItems.ExecuteDeleteAsync();
         });
     }
     

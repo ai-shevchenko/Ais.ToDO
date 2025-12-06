@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ais.ToDo.AppHost", "src\Ais
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ais.Commons.ServiceDefaults", "src\Ais.Commons.ServiceDefaults\Ais.Commons.ServiceDefaults.csproj", "{C8EA17F0-BB06-4CE9-A4E5-CF6F5E3AB123}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ais.Commons.Tests", "src\Ais.Commons.Tests\Ais.Commons.Tests.csproj", "{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,7 @@ Global
 		{A07C6CDF-6D33-4631-AAEF-414603915D68} = {6CE6841B-08B2-4DB1-9E00-D9838195673F}
 		{90DAF3B2-1595-458E-B2F2-FB049782B124} = {A07C6CDF-6D33-4631-AAEF-414603915D68}
 		{C8EA17F0-BB06-4CE9-A4E5-CF6F5E3AB123} = {BBEEC74E-451A-4F5B-AF41-CEE0B8C4ACBD}
+		{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F} = {BBEEC74E-451A-4F5B-AF41-CEE0B8C4ACBD}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{58C33BE1-8197-487C-83B8-8451E21D0CC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -124,5 +127,9 @@ Global
 		{C8EA17F0-BB06-4CE9-A4E5-CF6F5E3AB123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8EA17F0-BB06-4CE9-A4E5-CF6F5E3AB123}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8EA17F0-BB06-4CE9-A4E5-CF6F5E3AB123}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83C3864A-AFD6-43B2-A38A-BC8C8CECA48F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

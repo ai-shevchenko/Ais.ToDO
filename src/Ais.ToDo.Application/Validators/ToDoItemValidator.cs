@@ -8,9 +8,9 @@ namespace Ais.ToDo.Application.Validators;
 internal abstract class ToDoItemValidator<T> : AbstractValidator<T>
     where T : CreateToDoItemDto
 {
-    protected readonly IToDoContext Context;
+    protected readonly IToDoDbContext Context;
             
-    protected ToDoItemValidator(IToDoContext context)
+    protected ToDoItemValidator(IToDoDbContext context)
     {
         Context = context;
 

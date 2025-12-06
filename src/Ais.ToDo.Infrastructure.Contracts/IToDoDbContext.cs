@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ais.ToDo.Infrastructure.Contracts;
 
-public interface IToDoContext : IDbContext
+public interface IToDoDbContext : IDbContext
 {
     DbSet<ToDoItem> ToDoItems { get; }
 }

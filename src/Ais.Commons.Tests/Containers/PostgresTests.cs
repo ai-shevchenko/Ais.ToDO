@@ -1,6 +1,6 @@
 ﻿using Testcontainers.PostgreSql;
 
-namespace Ais.ToDo.Tests;
+namespace Ais.Commons.Tests.Containers;
 
 public sealed class PostgresTests : BaseContainerTests
 {

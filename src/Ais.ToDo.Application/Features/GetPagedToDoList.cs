@@ -23,10 +23,10 @@ public static class GetPagedToDoList
     
     internal sealed class Handler : IRequestHandler<Query, PagedToDoListDto>
     {
-        private readonly IToDoContext _context;
+        private readonly IToDoDbContext _context;
         private readonly IMapper _mapper;
         
-        public Handler(IToDoContext context, IMapper mapper)
+        public Handler(IToDoDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

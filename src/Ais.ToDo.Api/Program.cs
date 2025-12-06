@@ -12,6 +12,8 @@ using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.UseSerilog();
+
 builder.Host.UseDefaultServiceProvider(options =>
 {   
     options.ValidateScopes = builder.Environment.IsDevelopment();
@@ -92,6 +94,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapDefaultEndpoints();
 app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
@@ -104,3 +107,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+
+public partial class Program;

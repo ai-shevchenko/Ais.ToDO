@@ -4,6 +4,6 @@ namespace Ais.ToDo.Contracts;
 
 public sealed record ToDoItemCreatedDto : BaseItemCreatedDto<Guid>
 {
-    public required string Name { get; init; }
+    public required string Title { get; init; }
     public string? Description { get; init; }
 }

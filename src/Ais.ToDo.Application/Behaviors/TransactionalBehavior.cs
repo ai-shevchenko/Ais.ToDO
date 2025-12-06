@@ -5,10 +5,10 @@ using MediatR;
 
 namespace Ais.ToDo.Application.Behaviors;
 
-internal sealed class TransactionalBehavior<TRequest, TResponse> : TransactionalBehavior<IToDoContext, TRequest, TResponse>
+internal sealed class TransactionalBehavior<TRequest, TResponse> : TransactionalBehavior<IToDoDbContext, TRequest, TResponse>
     where TRequest : IRequest<TResponse>, ITransactionalRequest
 {
-    public TransactionalBehavior(IToDoContext context) 
+    public TransactionalBehavior(IToDoDbContext context) 
         : base(context)
     {
     }

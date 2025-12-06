@@ -15,7 +15,6 @@ internal sealed class ToDoItemCreatedConsumer : IConsumer<ToDoItemCreatedDto>
 
     public Task Consume(ConsumeContext<ToDoItemCreatedDto> context)
     {
-        _logger.LogInformation("Received message: {@Message}", context.Message);
         return Task.CompletedTask;
     }
 }

@@ -7,7 +7,7 @@ namespace Ais.Commons.Application.Contracts.Models;
 public abstract record BaseFilterDto<TResult> : IValidatableObject
 {
     public required string SortField { get; init; }
-    public required IReadOnlyList<string> SearchableFields { get; init; } 
+    public IReadOnlyList<string> SearchableFields { get; init; } = [];
     public required SortOrder SortOrder { get; init; }
     public string? Search { get; init; }
     
