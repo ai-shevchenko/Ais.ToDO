@@ -37,7 +37,6 @@ public abstract class TransactionalBehavior<TContext, TRequest, TResponse> : IPi
             
             var response = await next(token);
 
-            await _context.SaveChangesAsync(token);
             await transaction.CommitAsync(token);
             
             return response;
