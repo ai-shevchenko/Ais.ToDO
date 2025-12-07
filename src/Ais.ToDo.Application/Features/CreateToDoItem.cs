@@ -1,19 +1,21 @@
-﻿using Ais.Commons.CQRS.Requests;
+﻿using Ais.Commons.CQRS.Abstractions;
+using Ais.Commons.CQRS.Requests;
 using Ais.ToDo.Contracts;
 using Ais.ToDo.Core.Entities;
 using Ais.ToDo.Infrastructure.Contracts;
+
 using AutoMapper;
+
 using FluentValidation;
 
 using MassTransit;
 
-using MediatR;
 
 namespace Ais.ToDo.Application.Features;
 
 public static class CreateToDoItem
 {
-    public sealed record Command : BaseCommand<CreateToDoItemDto, ToDoItemCreatedDto>, 
+    public sealed record Command : BaseRequest<CreateToDoItemDto, ToDoItemCreatedDto>, 
         IValidatableRequest,
         ITransactionalRequest
     {
@@ -21,9 +23,11 @@ public static class CreateToDoItem
             : base(model)
         {
         }
+
+        public override string RequestName => nameof(CreateToDoItem);
     }
     
-    internal sealed class Handler : IRequestHandler<Command, ToDoItemCreatedDto>
+    internal sealed class Handler : BaseRequestHandler<Command, ToDoItemCreatedDto>
     {
         private readonly IToDoDbContext _context;
         private readonly IMapper _mapper;
@@ -36,7 +40,7 @@ public static class CreateToDoItem
             _publishEndpoint = publishEndpoint;
         }
 
-        public async Task<ToDoItemCreatedDto> Handle(Command request, CancellationToken cancellationToken)
+        protected override async Task<ToDoItemCreatedDto> HandleAsync(Command request, CancellationToken cancellationToken)
         {
             var toDoItem = _mapper.Map<ToDoItem>(request.Model);
             await _context.ToDoItems.AddAsync(toDoItem, cancellationToken);

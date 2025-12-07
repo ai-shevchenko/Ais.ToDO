@@ -1,27 +1,29 @@
-﻿using Ais.Commons.CQRS;
-using Ais.Commons.CQRS.Requests;
+﻿using Ais.Commons.CQRS.Abstractions;
 using Ais.Commons.Utils.Extensions;
 using Ais.ToDo.Contracts;
 using Ais.ToDo.Core.Entities;
 using Ais.ToDo.Infrastructure.Contracts;
+
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Ais.ToDo.Application.Features;
 
 public static class GetPagedToDoList
 {
-    public sealed record Query : BaseQuery<GetPagedToDoListDto, PagedToDoListDto>
+    public sealed record Query : BaseRequest<GetPagedToDoListDto, PagedToDoListDto>
     {
         public Query(GetPagedToDoListDto model) 
             : base(model)
         {
         }
+
+        public override string RequestName => nameof(GetPagedToDoList);
     }
     
-    internal sealed class Handler : IRequestHandler<Query, PagedToDoListDto>
+    internal sealed class Handler : BaseRequestHandler<Query, PagedToDoListDto>
     {
         private readonly IToDoDbContext _context;
         private readonly IMapper _mapper;
@@ -32,7 +34,7 @@ public static class GetPagedToDoList
             _mapper = mapper;
         }
 
-        public async Task<PagedToDoListDto> Handle(Query request, CancellationToken cancellationToken)
+        protected override async Task<PagedToDoListDto> HandleAsync(Query request, CancellationToken cancellationToken)
         {
             var filter = request.Model;
             

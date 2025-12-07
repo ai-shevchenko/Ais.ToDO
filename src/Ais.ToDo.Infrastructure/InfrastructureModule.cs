@@ -1,10 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
+
 using Ais.Commons.DependencyInjection;
 using Ais.Commons.EntityFramework.Contracts;
 using Ais.ToDo.Infrastructure.Consumers;
 using Ais.ToDo.Infrastructure.Contracts;
 using Ais.ToDo.Infrastructure.Postgres;
+
 using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +52,8 @@ public sealed class InfrastructureModule : Module
             {
                 o.UsePostgres();
                 o.UseBusOutbox();
+
+                o.QueryDelay = TimeSpan.FromSeconds(5);
             });
             
             x.AddConfigureEndpointsCallback((context, name, cfg) =>
@@ -74,6 +79,7 @@ public sealed class InfrastructureModule : Module
             options.UseNpgsql(connectionString, npgsqlOptions =>
             {
                 npgsqlOptions.MigrationsAssembly(typeof(ToDoDbDbContext).Assembly);
+                npgsqlOptions.EnableRetryOnFailure();
 
 #if DEBUG
                 options.EnableSensitiveDataLogging();

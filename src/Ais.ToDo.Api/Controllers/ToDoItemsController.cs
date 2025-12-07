@@ -23,7 +23,7 @@ public class ToDoItemsController : ControllerBase
         [FromRoute] Guid id, 
         CancellationToken cancellationToken)
     {
-        var response = await sender.Send(new GetToDoItemById.Query(id), cancellationToken);
+        var response = await sender.Send(new GetToDoItemById.Request(id), cancellationToken);
         return response is null
             ? NotFound()
             : Ok(response);

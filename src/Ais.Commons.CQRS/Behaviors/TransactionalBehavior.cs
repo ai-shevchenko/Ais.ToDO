@@ -1,6 +1,9 @@
 ﻿using Ais.Commons.CQRS.Requests;
+using Ais.Commons.CQRS.Tracing;
 using Ais.Commons.EntityFramework.Contracts;
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace Ais.Commons.CQRS.Behaviors;
 
@@ -17,19 +20,28 @@ public abstract class TransactionalBehavior<TContext, TRequest, TResponse> : IPi
 
     public virtual async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        await using var transaction = await _context.BeginTransactionAsync(cancellationToken);
-        try
+        if (!request.EnablePipelineBehavior || _context.Database.CurrentTransaction is not null)
         {
-            var response = await next(cancellationToken);
+            return await next(cancellationToken);
+        }
 
-            await _context.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-            return response;
-        }
-        catch
+        var activityName = $"{DiagnosticHeaders.DefaultListenerName} TransactionalBehavior {request.RequestName}";
+        using var activity = DiagnosticHelpers.StartActivity(activityName, request.EnableTracing);
+        
+        var strategy = _context.Database.CreateExecutionStrategy();
+        var response = await strategy.ExecuteAsync(async (token) =>
         {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
+            await using var transaction = await _context.Database.BeginTransactionAsync(token);
+            
+            activity?.SetTag("transaction.id", transaction.TransactionId);
+            
+            var response = await next(token);
+
+            await _context.SaveChangesAsync(token);
+            await transaction.CommitAsync(token);
+            
+            return response;
+        }, cancellationToken);
+        return response;
     }
 }

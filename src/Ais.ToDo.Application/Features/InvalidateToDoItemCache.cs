@@ -1,7 +1,6 @@
-﻿using Ais.Commons.CQRS.Requests;
-using Ais.ToDo.Contracts;
+﻿using Ais.Commons.CQRS.Abstractions;
 
-using MediatR;
+using Ais.ToDo.Contracts;
 
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -9,7 +8,7 @@ namespace Ais.ToDo.Application.Features;
 
 public static class InvalidateToDoItemCache
 {
-    public sealed record Command : BaseCommand<ToDoItemUpdatedDto>
+    public sealed record Command : BaseRequest<ToDoItemUpdatedDto>
     {
         public Command(ToDoItemUpdatedDto model) 
             : base(model)
@@ -17,9 +16,11 @@ public static class InvalidateToDoItemCache
         }
         
         public string CacheKey => $"todo-item:{Model.Id}";
+
+        public override string RequestName =>  nameof(InvalidateToDoItemCache);
     }
     
-    internal sealed class Handler : IRequestHandler<Command>
+    internal sealed class Handler : BaseRequestHandler<Command>
     {
         private readonly IDistributedCache _cache;
 
@@ -28,7 +29,7 @@ public static class InvalidateToDoItemCache
             _cache = cache;
         }
 
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        protected override async Task HandleAsync(Command request, CancellationToken cancellationToken)
         {
             await _cache.RemoveAsync(request.CacheKey, cancellationToken);
         }

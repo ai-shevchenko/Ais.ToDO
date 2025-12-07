@@ -77,6 +77,9 @@ public static class Extensions
                 tracing
                     .AddSource(builder.Environment.ApplicationName)
                     .AddSource(DiagnosticHeaders.DefaultListenerName)
+                    .AddSource("MediatR")
+                    .AddEntityFrameworkCoreInstrumentation()
+                    .AddRedisInstrumentation()
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation();
             })

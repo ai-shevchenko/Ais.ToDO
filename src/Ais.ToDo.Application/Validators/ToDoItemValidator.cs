@@ -1,6 +1,7 @@
 ﻿using Ais.ToDo.Contracts;
 using Ais.ToDo.Core.Constraints;
 using Ais.ToDo.Infrastructure.Contracts;
+
 using FluentValidation;
 
 namespace Ais.ToDo.Application.Validators;

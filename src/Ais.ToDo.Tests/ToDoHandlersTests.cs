@@ -112,7 +112,7 @@ public sealed class ToDoHandlersTests : BaseTests<ToDoWebApplicationFactory, Pro
         var item = await ExecuteAsync<IToDoDbContext, ToDoItem>(async context => await context.ToDoItems.FirstAsync());
         
         // Act
-        var query = new GetToDoItemById.Query(item.Id);
+        var query = new GetToDoItemById.Request(item.Id);
         var response = await SendAsync(query);
         
         // Assert

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ais.Commons.DependencyInjection\Ais.Commons.DependencyInjection.csproj" />
+      <ProjectReference Include="..\Ais.ToDo.Application\Ais.ToDo.Application.csproj" />
       <ProjectReference Include="..\Ais.ToDo.Contracts\Ais.ToDo.Contracts.csproj" />
       <ProjectReference Include="..\Ais.ToDo.Infrastructure.Contracts\Ais.ToDo.Infrastructure.Contracts.csproj" />
     </ItemGroup>

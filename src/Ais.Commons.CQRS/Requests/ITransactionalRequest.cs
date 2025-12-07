@@ -1,3 +1,3 @@
 ﻿namespace Ais.Commons.CQRS.Requests;
 
-public interface ITransactionalRequest;
+public interface ITransactionalRequest : IRequestMeta;

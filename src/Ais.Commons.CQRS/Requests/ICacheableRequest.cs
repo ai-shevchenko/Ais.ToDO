@@ -1,6 +1,6 @@
 ﻿namespace Ais.Commons.CQRS.Requests;
 
-public interface ICacheableRequest
+public interface ICacheableRequest : IRequestMeta
 {
     TimeSpan SlidingExpiration { get; }
     TimeSpan AbsoluteExpirationRelativeToNow { get; }

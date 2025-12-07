@@ -1,7 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
+
 using Ais.Commons.CQRS.Behaviors;
 using Ais.Commons.DependencyInjection;
+
 using FluentValidation;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,10 +23,8 @@ public sealed class ApplicationModule : Module
 
             options.AddOpenBehaviors([
                 typeof(CacheableBehavior<,>),
-                typeof(ValidationBehavior<,>),
                 typeof(Behaviors.TransactionalBehavior<,>),
-                typeof(PublishBehavior<,>),
-                typeof(NotifyBehavior<,>)
+                typeof(ValidationBehavior<,>),
             ]);
         });
 
